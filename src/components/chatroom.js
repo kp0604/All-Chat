@@ -3,7 +3,8 @@ import { Button, TextField } from '@material-ui/core';
 
 function ChatRoom(props) {
     
-    const { uid, photoURL } = props.currentUser
+    
+    
 
 
     return (<div style={{ display: "flex", flexDirection: "column", }}>
@@ -11,7 +12,8 @@ function ChatRoom(props) {
         <div>
 
             {props.gotMessage ? props.gotMessage.map((msg, idx) => {
-                return (<div> <img src={photoURL}/>
+                return (<div> <img src={msg.userPhoto} />
+                    {/* <p>{msg.created_at}</p> */}
              <h1 key={idx}>{msg.messageDb}</h1></div>)
             }) : <h1>loading</h1>
             }
