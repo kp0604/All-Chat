@@ -1,0 +1,24 @@
+0 info it worked if it ends with ok
+1 verbose cli [
+1 verbose cli   'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   '@material-ui/core/icons'
+1 verbose cli ]
+2 info using npm@6.14.12
+3 info using node@v14.16.1
+4 verbose npm-session 65e0ce0051262381
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 silly fetchPackageMetaData error for file:@material-ui\core\icons Could not install from "@material-ui\core\icons" as it does not contain a package.json file.
+8 timing stage:rollbackFailedOptional Completed in 1ms
+9 timing stage:runTopLevelLifecycles Completed in 3684ms
+10 verbose stack Error: ENOENT: no such file or directory, open 'C:\Users\kartikeya pandey\Desktop\chat-in\@material-ui\core\icons\package.json'
+11 verbose cwd C:\Users\kartikeya pandey\Desktop\chat-in
+12 verbose Windows_NT 10.0.19042
+13 verbose argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "@material-ui/core/icons"
+14 verbose node v14.16.1
+15 verbose npm  v6.14.12
+16 error code ENOLOCAL
+17 error Could not install from "@material-ui\core\icons" as it does not contain a package.json file.
+18 verbose exit [ 1, true ]

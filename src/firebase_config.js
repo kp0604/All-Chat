@@ -1,4 +1,4 @@
-// import { firestore } from "firebase-admin";
+
 import firebase from 'firebase';
 
 const firebaseConfig = {
