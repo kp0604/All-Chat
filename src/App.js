@@ -3,9 +3,36 @@ import "./App.css";
 import { db, firebase, auth } from "./firebase_config";
 import { useEffect, useState } from "react";
 import ChatRoom from "./components/chatroom";
+import {Container,makeStyles,} from '@material-ui/core';
+import chatbg6 from "./bgs/chatbg6.jpg"
+
 
 import Header from './components/header'
 import Home from './components/home'
+
+const useStyles = makeStyles({
+
+  ho: {
+     
+      // backgroundImage: `url(${chatbg6})`,
+   
+      // backgroundPosition: "center",
+      // backgroundRepeat: "no-repeat",
+      // backgroundSize: "cover",
+    backgroundColor:'lightblue',
+      // position: "fixed",
+    
+      // width: "100vw",
+      height: "100vh",
+      // display: "flex",
+      // flexDirection: "column",
+      // justifyContent: "center",
+      // alignItems: "center",
+      padding:'0px',
+
+
+  },
+})
 
 
 function App() {
@@ -21,7 +48,7 @@ function App() {
   
   const addDb = () => {
     
-    if (message != "") {
+    if (message !== "") {
       db.collection("pi").add({
         userName:auth.currentUser.displayName,
         userUID: auth.currentUser.uid,
@@ -70,9 +97,14 @@ function App() {
     e.preventDefault();
     addDb();
   };
+
+  
+
+  const classes = useStyles()    
   
   return (
-    <>
+    // <>
+    <Container maxWidth="sm" className={classes.ho}> 
       <Header signOut={SignOut} signedIn={signedIn} signInWIthGoogle={signInWIthGoogle} />
       {signedIn ?
         <ChatRoom
@@ -83,7 +115,9 @@ function App() {
         /> :<Home/>
         
       }
-    </>
+      {/* <Home/> */}
+    </Container>
+    // </>
   );
 }
 

@@ -10,8 +10,9 @@ const useStyles = makeStyles(theme => ({
     avBox: {
         display: "flex",
         flexDirection: "column",
-        margin: "20px 0px 20px 0px",
-        padding: "0px 40px 0px 10px",
+        // alignItems:'end',
+        margin: "35px 0px 35px 0px",
+        padding: "0px 0px 0px 0px",
 
     }
     ,
@@ -33,11 +34,11 @@ const useStyles = makeStyles(theme => ({
     ,
     avname: {
 
-        width: "fit-content",
-        maxWidth: "fit-content",
+        // width: "fit-content",
+        // maxWidth: "fit-content",
 
         padding: "0px 4px 0px 4px",
-        color: "darkblack",
+        color: "black",
         margin: "0px 0px 0px 10px",
 
     },
@@ -59,38 +60,45 @@ const useStyles = makeStyles(theme => ({
 
 
     main: {
+        // minHeight:'80vh',
+        height:'80vh',
+        overflowY:'scroll',
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: "white",
+        // backgroundColor: "white",
         position: 'relative',
         justifyContent: "center",
         alignContent: "center",
         alignItems: "center",
-        backgroundImage: `url(${chatbg6})`,
+        // backgroundImage: `url(${chatbg6})`,
 
-        backgroundPosition: "left top",
-        backgroundAttachment: "fixed",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "100vw 140vh",
+        // backgroundPosition: "left top",
+        // backgroundAttachment: "fixed",
+        // backgroundRepeat: "no-repeat",
+        // backgroundSize: "100vw 140vh",
 
 
     },
 
     container: {
-
+        height:  'calc(100vh - 150px)',
+        overflowY:'scroll',
         position: 'relative',
-        bottom: "50px",
-        backgroundImage: `url(${chatbg6})`,
+        // listStyle:'none',
+        // bottom: "50px",
+        // backgroundImage: `url(${chatbg6})`,
+        // backgroundColor: 'rgb(255,255,255)',
 
-        backgroundPosition: "center",
+        // backgroundPosition: "center",
 
-        backgroundAttachment: "fixed",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "100vw 100vh",
+        // backgroundAttachment: "fixed",
+        // backgroundRepeat: "no-repeat",
+        // backgroundSize: "100vw 100vh",
+        
+        padding: "10px 40px 10px 40px",
+        margin: "0px 0px 0px 0px",
 
-
-        padding: "15px 22px 15px 22px",
-
+        
     }
     ,
 
@@ -126,7 +134,7 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
-        margin: '12px 0px 12px 0px',
+        margin: '10px 0px 10px 0px',
         padding: '7px',
         width: '100%',
 
@@ -146,6 +154,7 @@ const useStyles = makeStyles(theme => ({
         flexGrow: '0.05',
         flexBasis: '1',
         flexShrink: '1',
+        cursor:'pointer'
     }
 
 
@@ -154,35 +163,37 @@ const useStyles = makeStyles(theme => ({
 
 function ChatRoom(props) {
 
+    console.log(props.gotMessage)
+
     useEffect(() => window.scrollTo(0, document.body.scrollHeight))
 
     const classes = useStyles()
 
 
     return (<>
-        <Box component="div" className={classes.main}>
-            <CssBaseline />
-            <Container className={classes.container} maxWidth="md" >
-
+        {/* <Box component="div" className={classes.main}> */}
+            {/* <CssBaseline /> */}
+            <ul className={classes.container} >
                 {props.gotMessage ? props.gotMessage.map((msg, idx) => {
                     return (
-                        <Container key={idx} className={classes.avBox}  >
-
-                            <Box className={classes.typobox}>
-                                <Avatar className={classes.large}
+                        <li key={idx} className={classes.avBox}  >
+                            
+                            <div className={classes.typobox}>
+                                <Avatar className={classes.large} style={{justifySelf:'end'}}
                                     src={msg.userPhoto} />
 
                                 <Typography className={classes.avname} color="textPrimary" variant="body1">{msg.userName}</Typography>
-                            </Box>
+                            </div>
                             <Typography className={classes.avTypo} variant="body2" gutterBottom>{msg.messageDb}</Typography>
 
-                        </Container>
+                        </li>
                     )
                 }) : <h1>loading</h1>
                 }
 
-            </Container>
-            <Container maxWidth="md" className={classes.footer}>
+            </ul>
+        {/* </Box> */}
+            <Container maxWidth="sm" className={classes.footer}>
                 <form className={classes.form} noValidate autoComplete="off">
                     <Input className={classes.input} value={props.message}
                         onChange={(e) => props.handleChange(e)} placeholder="Say Something..."
@@ -193,7 +204,6 @@ function ChatRoom(props) {
             </Container>
 
 
-        </Box>
     </>
     )
 

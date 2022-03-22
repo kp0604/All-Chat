@@ -7,16 +7,16 @@ const useStyles = makeStyles({
 
     home: {
        
-        backgroundImage: `url(${chatbg6})`,
+        // backgroundImage: `url(${chatbg6})`,
      
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
+        // backgroundPosition: "center",
+        // backgroundRepeat: "no-repeat",
+        // backgroundSize: "cover",
       
-        position: "fixed",
+        // position: "fixed",
       
-        width: "100%",
-        height: "100%",
+        // width: "100vw",
+        // height: "80vh",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",

@@ -5,8 +5,9 @@ import { makeStyles } from '@material-ui/core/styles'
 const useStyles = makeStyles({
     AppBar: {
        
-        backgroundColor: "#00688B	",
-       
+        backgroundColor: "#00688B",
+       position:'sticky',
+       top:'0',
 
     },
 
@@ -21,29 +22,27 @@ function Header(props) {
     const classes = useStyles()
 
     return (
-        <>
-            <CssBaseline />
-                <AppBar  className={classes.AppBar} >
-            <Container maxWidth="md" >
-                    <Toolbar className={classes.toolbar}>
-                        <Typography variant="h5"  >
-                            All-CHAT
-                    </Typography>
-                        {props.signedIn ?
-                            <Button size="small" onClick={props.signOut} variant="contained"
-                            >SignOut</Button>
-                            :
-                            <Button size="small" onClick={props.signInWIthGoogle} variant="contained">SignIn</Button>
-                        }
-
-                    </Toolbar>
-            </Container>
-                </AppBar>
-
-
-        </>
-
-    )
+      <>
+        <AppBar className={classes.AppBar} position="static">
+          <Toolbar className={classes.toolbar}>
+            <Typography variant="h5">All-CHAT</Typography>
+            {props.signedIn ? (
+              <Button size="small" onClick={props.signOut} variant="contained">
+                Sign-Out
+              </Button>
+            ) : (
+              <Button
+                size="small"
+                onClick={props.signInWIthGoogle}
+                variant="contained"
+              >
+                Sign-In
+              </Button>
+            )}
+          </Toolbar>
+        </AppBar>
+      </>
+    );
 
 }
 
