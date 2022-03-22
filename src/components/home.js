@@ -16,7 +16,7 @@ const useStyles = makeStyles({
         // position: "fixed",
       
         // width: "100vw",
-        // height: "80vh",
+        height: "80vh",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -53,7 +53,7 @@ function Home(props) {
                 <Typography className={classes.typo} variant="h5" color="textPrimary" >share your thoughts..</Typography>
                 <Typography className={classes.typo} variant="h5" color="textPrimary" >Happy Chatting !</Typography>
             </Box>
-
+            
         </>
     )
 
