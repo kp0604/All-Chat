@@ -2,8 +2,8 @@ import "./App.css";
 import { AuthState } from "./states/AuthState";
 import ProtectedRoutes from "./protectedRoutes";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Front from "../src/components/Front";
-import Home from "../src/components/Home";
+import Front from "./components/Front.js";
+import Home from "./components/Home.js";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { grey } from "@mui/material/colors";
 
