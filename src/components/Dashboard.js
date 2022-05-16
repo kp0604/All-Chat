@@ -6,7 +6,7 @@ import { Grid } from "@mui/material";
 import { CurrentServerState } from "../states/CurrentServerState";
 import { CurrentChannelState } from "../states/CurrentChannelState";
 
-function Home() {
+function Dashboard() {
   return (
     <CurrentServerState>
       <CurrentChannelState>
@@ -26,4 +26,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Dashboard;

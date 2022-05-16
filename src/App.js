@@ -3,7 +3,7 @@ import { AuthState } from "./states/AuthState";
 import ProtectedRoutes from "./protectedRoutes";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Front from "./components/Front";
-import Home from "./components/Home";
+import Dashboard from "./components/Dashboard";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { grey } from "@mui/material/colors";
 
@@ -45,9 +45,9 @@ function App() {
           <Routes>
             <Route path="/" element={<Front />} />
             <Route element={<ProtectedRoutes />}>
-              <Route path="/home" element={<Home />} />
-              <Route path="/home/:serverId" element={<Home />} />
-              <Route path="/home/:serverId/:channelId" element={<Home />} />
+              <Route path="/home" element={<Dashboard />} />
+              <Route path="/home/:serverId" element={<Dashboard />} />
+              <Route path="/home/:serverId/:channelId" element={<Dashboard />} />
             </Route>
           </Routes>
         </ThemeProvider>
