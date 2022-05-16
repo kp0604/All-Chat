@@ -1,5 +1,8 @@
-# https://all-chat.netlify.app/
-All-Chat is a web-app where users can chat in a common room...
-- Users can SignIn/SignOut and chat with other users
-- It is built using React ,Firebase,Material-Ui
-- Firebase Authentication and Firestore is used for Backend.
+# https://discord-like.netlify.app/
+
+Kind of Discord Clone
+
+Tech Used - ( REACT -- MATERIAL-UI -- CONTEXT-API -- FIREBASE )
+
+- A Discord Like Single page Web-App developed in React and MUI for sharing thoughts in different servers and channels
+, State management is done with context api, Authentication with Firebase google auth and database built in Firestore.

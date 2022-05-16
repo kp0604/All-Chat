@@ -1,176 +1,300 @@
 import {
-  makeStyles,
-  Container,
-  Avatar,
+  Box,
   Typography,
-  Input,
-} from "@material-ui/core";
-import { useEffect } from "react";
-import { Send } from "@material-ui/icons";
+  AppBar,
+  Button,
+  Toolbar,
+  Stack,
+  OutlinedInput,
+  InputAdornment,
+  Grid,
+} from "@mui/material";
+import { useContext, useEffect, useRef, useState } from "react";
+import SendIcon from "@mui/icons-material/Send";
+import TagIcon from "@mui/icons-material/Tag";
 
-const useStyles = makeStyles((theme) => ({
-  avBox: {
-    display: "flex",
-    flexDirection: "column",
-    margin: "35px 0px 35px 0px",
-    padding: "0px 0px 0px 0px",
-  },
-  small: {
-    width: theme.spacing(3),
-    height: theme.spacing(3),
-  },
-  large: {
-    width: theme.spacing(5),
-    height: theme.spacing(5),
-  },
+import { db } from "../firebase_config";
+import { AuthContext } from "../states/AuthState";
+import {
+  collection,
+  addDoc,
+  onSnapshot,
+  serverTimestamp,
+  orderBy,
+  query,
+  getDocs,
+  doc,
+} from "firebase/firestore";
+import Members from "./Members";
+import { CurChanStateContext } from "../states/CurrentChannelState";
+import { CurSerStateContext } from "../states/CurrentServerState";
+import AvatarComp from "./AvatarComp";
+import dis1 from "./../imgs/dis1.png";
+import ChatLoading from "./ChatLoading";
 
-  typobox: {
-    display: "flex",
-    alignItems: "center",
-  },
-  avname: {
-    padding: "0px 4px 0px 4px",
-    color: "black",
-    margin: "0px 0px 0px 10px",
-  },
+function ChatRoom() {
+  const [, SignOut, currentUser] = useContext(AuthContext);
+  const [, curServId] = useContext(CurSerStateContext);
+  const [curChanId, setloadingChat, loadingChat] =
+    useContext(CurChanStateContext);
 
-  avTypo: {
-    maxWidth: "fit-content",
-    wordWrap: "break-word",
-    padding: "6px 10px 6px 10px",
-    margin: "5px 0px 5px 55px",
+  const colRef = collection(
+    db,
+    "servers",
+    `${curServId}`,
+    "chatrooms",
+    `${curChanId}`,
+    "messages"
+  );
 
-    backgroundColor: "whitesmoke",
-    borderRadius: "0px 12px 12px 12px",
-  },
-  main: {
-    height: "80vh",
-    overflowY: "scroll",
-    display: "flex",
-    flexDirection: "column",
-    position: "relative",
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
-  },
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Header>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
 
-  container: {
-    height: "calc(100vh - 150px)",
-    overflowY: "scroll",
-    position: "relative",
+  const [chatroom, setChatroom] = useState(null);
 
-    padding: "10px 40px 10px 40px",
-    margin: "0px 0px 0px 0px",
-  },
-  contypo: {
-    position: "relative",
-    color: "white",
-    top: "10vh",
-  },
-  chats: {
-    position: "relative",
-    top: "15vh",
-    height: "80vh",
+  const docRef = doc(
+    db,
+    "servers",
+    `${curServId}`,
+    "chatrooms",
+    `${curChanId}`
+  );
+  const docSnap = query(docRef);
+  onSnapshot(docSnap, (snapshot) => {
+    setChatroom(snapshot.data());
+  });
 
-    padding: "13px",
-  },
-  footer: {
-    backgroundColor: "#00688B",
-    display: "flex",
-    position: "fixed",
-    bottom: "0",
-    justifyContent: "center",
-  },
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
 
-  form: {
-    alignSelf: "center",
-    display: "flex",
-    backgroundColor: "whitesmoke",
-    borderRadius: "10px",
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
-    margin: "10px 0px 10px 0px",
-    padding: "7px",
-    width: "100%",
-  },
-  input: {
-    flexGrow: "0.9",
-    flexBasis: "1",
-    flexShrink: "1",
-  },
-  send: {
-    flexGrow: "0.05",
-    flexBasis: "1",
-    flexShrink: "1",
-    cursor: "pointer",
-  },
-}));
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>SendMessage>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-function ChatRoom(props) {
-  console.log(props.gotMessage);
+  const [message, setMessage] = useState("");
 
-  useEffect(() => window.scrollTo(0, document.body.scrollHeight));
+  const handleInput = (e) => {
+    e.preventDefault();
+    setMessage(e.target.value);
+  };
 
-  const classes = useStyles();
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      sendMessage();
+      getMessages();
+    }
+  };
+
+  const sendMessage = async () => {
+    setMessage("");
+    const data = {
+      ownerName: currentUser.displayName,
+      ownerId: currentUser.uid,
+      ownerPhoto: currentUser.photoURL,
+      message: message,
+      createdAt: serverTimestamp(),
+    };
+    if (message !== "") {
+      const docRef = await addDoc(colRef, data);
+
+      // onSnapshot(q, (snapshot) => {
+      //   setgotMessage(
+      //     snapshot.docs.map((doc) => {
+      //       return { ...doc.data(), id: doc.id };
+      //     })
+      //   );
+
+      //   })
+    }
+  };
+
+  const handleSend = (e) => {
+    e.preventDefault();
+    sendMessage();
+    getMessages();
+  };
+
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>get Message>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+  useEffect(() => (curChanId ? getMessages() : null), [curChanId]);
+
+  const q = query(colRef, orderBy("createdAt"));
+
+  const [gotMessage, setgotMessage] = useState([]);
+
+  const scrollRef = useRef(null);
+
+  const getMessages = async () => {
+    console.log(curChanId);
+    const querySnap = await getDocs(q);
+    setgotMessage(
+      querySnap.docs.map((doc) => {
+        return { ...doc.data() };
+      })
+    );
+    setloadingChat(false);
+    await scrollRef.current?.scrollIntoView();
+  };
+
+  // onSnapshot(q, (snapshot) => {
+  //   setgotMessage(
+  //     snapshot.docs.map((doc) => {
+  //       return { ...doc.data(), id: doc.id };
+  //     })
+  //   );
+
+  //   })
+
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
   return (
-    <>
-      <ul className={classes.container}>
-        {props.gotMessage ? (
-          props.gotMessage.map((msg, idx) => {
-            return (
-              <li key={idx} className={classes.avBox}>
-                <div className={classes.typobox}>
-                  <Avatar
-                    className={classes.large}
-                    style={{ justifySelf: "end" }}
-                    src={msg.userPhoto}
-                  />
-
-                  <Typography
-                    className={classes.avname}
-                    color="textPrimary"
-                    variant="body1"
-                  >
-                    {msg.userName}
-                  </Typography>
-                </div>
-                <Typography
-                  className={classes.avTypo}
-                  variant="body2"
-                  gutterBottom
-                >
-                  {msg.messageDb}
-                </Typography>
-              </li>
-            );
-          })
-        ) : (
-          <h1>loading</h1>
-        )}
-      </ul>
-
-      <Container maxWidth="md" className={classes.footer}>
-        <form className={classes.form} noValidate autoComplete="off">
-          <Input
-            className={classes.input}
-            value={props.message}
-            onChange={(e) => props.handleChange(e)}
-            placeholder="Say Something..."
-            inputProps={{ "aria-label": "description" }}
-          />
-
-          <Send
-            className={classes.send}
-            onClick={(e) => props.handleClick(e)}
-            variant="contained"
+    <Box height={1}>
+      <AppBar position="static" sx={{ boxShadow: 1, bgcolor: "white" }}>
+        <Toolbar
+          variant="dense"
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            boxShadow: "none",
+          }}
+        >
+          <Typography
+            variant="subtitle1"
+            component="div"
+            alignItems="center"
+            sx={{
+              display: "inline-flex",
+            }}
           >
-            Send
-          </Send>
-        </form>
-      </Container>
-    </>
+            <TagIcon sx={{ mr: 2 }} />
+
+            {chatroom
+              ? chatroom.chatroomName.charAt(0).toUpperCase() +
+                chatroom.chatroomName.slice(1).toLowerCase()
+              : "Channel Name..."}
+          </Typography>
+          <Box sx={{ borderLeft: "2px solid grey", pl: 2 }}>
+            {currentUser ? (
+              <Button
+                size="small"
+                variant="contained"
+                color="secondary"
+                onClick={SignOut}
+              >
+                Sign-Out
+              </Button>
+            ) : null}
+          </Box>
+        </Toolbar>
+      </AppBar>
+      {/*  */}
+      <Grid container spacing={0} height={0.92}>
+        <Grid item xs={curServId ? 9 : 12} height={1}>
+          <Box height={1}>
+            <Stack
+              sx={{
+                px: 4,
+                py: 4,
+                // height: "calc(100vh - 250px)",
+                overflowY: "scroll",
+              }}
+              // maxHeight={0.9}
+              height={0.77}
+              spacing={4}
+            >
+              {gotMessage.length && !loadingChat ? (
+                gotMessage.map((msg, idx) => {
+                  return (
+                    <Box
+                      key={idx}
+                      sx={{
+                        display: "flex",
+                      }}
+                    >
+                      <AvatarComp
+                        sx={{ width: 40, height: 40, mr: 3 }}
+                        src={msg.ownerPhoto}
+                      />
+                      <Box maxWidth={0.9}>
+                        <Typography
+                          variant="subtitle1"
+                          color="darkOrange"
+                          component="div"
+                        >
+                          {msg.ownerName}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          component="div"
+                          sx={{ wordWrap: "break-word", maxWidth: 1 }}
+                        >
+                          {msg.message}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  );
+                })
+              ) : loadingChat ? (
+                <ChatLoading />
+              ) : (
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="center"
+                  alignItems="center"
+                  height={1}
+                >
+                  <AvatarComp
+                    src={dis1}
+                    sx={{ height: "200px", width: "200px", mb: 4 }}
+                    type={"rounded"}
+                  />
+                  <Typography variant="h6" component="h6" align="center">
+                    Select the Channel you like and Chat with members....
+                  </Typography>
+                </Box>
+              )}
+              <div ref={scrollRef}></div>
+            </Stack>
+
+            <Box sx={{ px: 3, pt: 1 }}>
+              <OutlinedInput
+                onKeyPress={(e) => handleKeyPress(e)}
+                disabled={gotMessage.length ? false : true}
+                sx={{ bgcolor: "primary.main" }}
+                value={message}
+                onChange={(e) => handleInput(e)}
+                placeholder="Say Something..."
+                size="small"
+                endAdornment={
+                  <InputAdornment>
+                    <Button
+                      size="large"
+                      endIcon={
+                        <SendIcon
+                          sx={{ color: "primary.dark" }}
+                          fontSize="large"
+                        />
+                      }
+                      onClick={(e) => handleSend(e)}
+                    ></Button>
+                  </InputAdornment>
+                }
+                fullWidth
+              ></OutlinedInput>
+            </Box>
+          </Box>
+        </Grid>
+        <Grid
+          item
+          xs={3}
+          height={1}
+          sx={{ display: curServId ? "block" : "none" }}
+        >
+          <Members />
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
 
