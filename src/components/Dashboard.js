@@ -1,7 +1,7 @@
 import React from "react";
-import ChatRoom from "./Chatroom";
+import ChatRoom from "./Chatroom.js";
 import Navs from "./Navs";
-import Serverrooms from "./Serverrooms";
+import Serverrooms from "./Serverrooms.js";
 import { Grid } from "@mui/material";
 import { CurrentServerState } from "../states/CurrentServerState";
 import { CurrentChannelState } from "../states/CurrentChannelState";
