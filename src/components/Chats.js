@@ -32,7 +32,7 @@ import AvatarComp from "./AvatarComp";
 import dis1 from "./../imgs/dis1.png";
 import ChatLoading from "./ChatLoading";
 
-function ChatRoom() {
+function Chats() {
   const [, SignOut, currentUser] = useContext(AuthContext);
   const [, curServId] = useContext(CurSerStateContext);
   const [curChanId, setloadingChat, loadingChat] =
@@ -298,4 +298,4 @@ function ChatRoom() {
   );
 }
 
-export default ChatRoom;
+export default Chats;

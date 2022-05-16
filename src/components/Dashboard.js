@@ -1,5 +1,5 @@
 import React from "react";
-import ChatRoom from "./Chatroom.js";
+import Chats from "./Chats.js";
 import Navs from "./Navs";
 import Serverrooms from "./Serverrooms.js";
 import { Grid } from "@mui/material";
@@ -18,7 +18,7 @@ function Dashboard() {
             <Navs />
           </Grid>
           <Grid item xs={9} height={1}>
-            <ChatRoom />
+            <Chats />
           </Grid>
         </Grid>
       </CurrentChannelState>
