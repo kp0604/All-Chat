@@ -124,7 +124,6 @@ function Chats() {
   const scrollRef = useRef(null);
 
   const getMessages = async () => {
-    console.log(curChanId);
     const querySnap = await getDocs(q);
     setgotMessage(
       querySnap.docs.map((doc) => {

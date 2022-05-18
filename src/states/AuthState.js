@@ -34,7 +34,6 @@ function AuthState({children}) {
     const result = await signInWithPopup(auth, provider);
 
     const user = result.user;
-    console.log(user)
 
     const q = query(collection(db, "users"), where("userUID", "==", user.uid));
     const docs = await getDocs(q);

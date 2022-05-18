@@ -55,7 +55,6 @@ function Navs() {
   const [curServOwnerInfo, setcurServOwnerInfo] = useState(null);
 
   const getCurServOwnerInfo = async () => {
-    console.log(curServInfo);
     const docRef = doc(db, "users", `${curServInfo.ownerDocId}`);
     const docSnap = await getDoc(docRef);
 
