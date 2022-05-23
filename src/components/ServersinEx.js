@@ -5,6 +5,7 @@ import { db } from "../firebase_config";
 
 import { updateDoc, doc } from "firebase/firestore";
 import AvatarComp from "./AvatarComp";
+import dis5 from "./../imgs/dis5.png";
 
 export default function ServersinEx({ server, idx }) {
   const [follow, setFollow] = useState("Follow");
@@ -42,7 +43,7 @@ export default function ServersinEx({ server, idx }) {
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center" }}>
-        <AvatarComp name={server.serverName} type={"circular"} sx={{ mr: 2 }} />
+        <AvatarComp icon={dis5} type={"rounded"} sx={{ mr: 2 }} />
         <Typography variant="subtitle1" component="div">
           {server.serverName.toUpperCase()}
         </Typography>

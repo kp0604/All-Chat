@@ -170,11 +170,13 @@ function Navs() {
     const docRef1 = doc(db, "users", `${currentUserDb.id}`);
     await updateDoc(docRef1, { serversFollowed: arr1 });
     navigate("/home");
+    setOpenLcd(false);
   };
 
   const delServer = async () => {
     await deleteDoc(doc(db, "servers", `${curServId}`));
     navigate("/home");
+    setOpenDcd(false);
   };
 
   const handleCloseDcd = () => {
@@ -350,7 +352,7 @@ function Navs() {
         <Stack spacing={3} alignItems="center">
           {/*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> fetched chatrooms  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/}
 
-          {chatRooms.length ? (
+          {curServId && chatRooms.length ? (
             chatRooms.map((cR, idx) => (
               <Link
                 to={`/home/${curServId}/${cR.id}`}
@@ -376,6 +378,16 @@ function Navs() {
                 </Paper>
               </Link>
             ))
+          ) : curServId && chatRooms.length === 0 ? (
+            <Typography
+              align="center"
+              variant="subtitle2"
+              component="div"
+              color="primary.dark"
+              sx={{ fontWeight: 400, mt:2 }}
+            >
+              No Channel Created by owner Yet...
+            </Typography>
           ) : (
             <Box mt={2}>
               <Typography

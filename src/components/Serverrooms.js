@@ -9,6 +9,7 @@ import {
   TextField,
   Button,
   Tooltip,
+  Typography
 } from "@mui/material";
 import { AuthContext } from "../states/AuthState";
 import ExploreIcon from "@mui/icons-material/Explore";
@@ -31,10 +32,18 @@ import dis2 from "./../imgs/dis2.png";
 
 function Serverrooms() {
   const [, , currentUser, currentUserDb] = useContext(AuthContext);
-
+  
   useEffect(() => {
     getServersFollInfo();
   }, [currentUserDb]);
+
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Selected Server <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+  const [selSer,setSelSer] = useState("")
+
+  const handleSelect = (id)=>{
+    setSelSer(id)
+  }
 
   // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Dialog Explore   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -83,8 +92,8 @@ function Serverrooms() {
         const docSnap = await getDoc(docRef);
         let a = await docSnap.data();
         a.id = ser;
+        setServersFoll([...serFol, a]);
         serFol.push(a);
-        setServersFoll((prev) => serFol);
       });
     }
   };
@@ -129,6 +138,7 @@ function Serverrooms() {
       addDoc(colRef, {
         createdAt: serverTimestamp(),
         ownerId: currentUser.uid,
+        ownerDocId:currentUserDb.id,
         serverName: newServer,
       });
     }
@@ -163,12 +173,13 @@ function Serverrooms() {
             fullWidth
             variant="standard"
             value={newServer}
+            color="info"
             onChange={(e) => handleInput(e)}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={(e) => handleAdd(e)}>Create</Button>
+          <Button color="error" onClick={handleClose}>Cancel</Button>
+          <Button color="info" onClick={(e) => handleAdd(e)}>Create</Button>
         </DialogActions>
       </Dialog>
       <Dialog
@@ -185,10 +196,26 @@ function Serverrooms() {
                 <ServersinEx server={server} idx={idx} />
               ))
             ) : (
-              <>
-                <h4>Our Platform is growing....</h4>
-                <h4>More Servers will be added Soon !</h4>
-              </>
+              <Box mt={2}>
+              <Typography
+                align="center"
+                variant="subtitle1"
+                component="div"
+                color="primary.dark"
+                sx={{ fontWeight: 400 }}
+              >
+                Our Platform is growing....
+              </Typography>
+              <Typography
+                align="center"
+                variant="subtitle1"
+                component="div"
+                color="primary.dark"
+                sx={{ fontWeight: 400 }}
+              >
+                More Servers will be added Soon !
+              </Typography>
+            </Box>
             )}
           </Stack>
         </DialogContent>
@@ -207,17 +234,15 @@ function Serverrooms() {
           />
         </Box>
 
-        {serversFoll.length !== 0 ? (
+        {serversFoll.length? (
           serversFoll.map((server, idx) => (
             <Link
               to={`/home/${server.id}`}
               key={idx}
               style={{ textDecoration: "none" }}
-              // onClick={()=>setCurServId(server.id)}
+            onClick={()=>handleSelect(server.id)}
             >
-              {/* <div onClick={() => setCurServId(server.id)}> */}
-              <AvatarComp name={server.serverName} type={"rounded"} />
-              {/* </div> */}
+              <AvatarComp name={server.serverName} type={"rounded"} sx={selSer === server.id?({border:'2px solid black'}):null} />
             </Link>
           ))
         ) : (

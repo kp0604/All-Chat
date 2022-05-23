@@ -13,6 +13,7 @@ import { db } from "../firebase_config";
 import { CurSerStateContext } from "../states/CurrentServerState";
 import AvatarComp from "./AvatarComp";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import dis4 from "./../imgs/dis4.png";
 
 export default function Members() {
   const [, curServId] = useContext(CurSerStateContext);
@@ -57,7 +58,8 @@ export default function Members() {
           members.map((mem) => (
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <AvatarComp
-                name={mem.userName}
+                icon={dis4}
+                // name={mem.userName}
                 type={"circular"}
                 sx={{ mr: 1 }}
               />
