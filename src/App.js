@@ -43,11 +43,11 @@ function App() {
       <AuthState>
         <ThemeProvider theme={theme}>
           <Routes>
-            <Route path="/" element={<Front />} />
             <Route element={<ProtectedRoutes />}>
               <Route path="/home" element={<Dashboard />} />
               <Route path="/home/:serverId" element={<Dashboard />} />
               <Route path="/home/:serverId/:channelId" element={<Dashboard />} />
+            <Route path="/" element={<Front />} />
             </Route>
           </Routes>
         </ThemeProvider>

@@ -9,7 +9,7 @@ import {
   TextField,
   Button,
   Tooltip,
-  Typography
+  Typography,
 } from "@mui/material";
 import { AuthContext } from "../states/AuthState";
 import ExploreIcon from "@mui/icons-material/Explore";
@@ -24,6 +24,7 @@ import {
   getDocs,
   getDoc,
   doc,
+  updateDoc,
 } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import ServersinEx from "./ServersinEx";
@@ -32,18 +33,18 @@ import dis2 from "./../imgs/dis2.png";
 
 function Serverrooms() {
   const [, , currentUser, currentUserDb] = useContext(AuthContext);
-  
+
   useEffect(() => {
     getServersFollInfo();
   }, [currentUserDb]);
 
   // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Selected Server <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-  const [selSer,setSelSer] = useState("")
+  const [selSer, setSelSer] = useState("");
 
-  const handleSelect = (id)=>{
-    setSelSer(id)
-  }
+  const handleSelect = (id) => {
+    setSelSer(id);
+  };
 
   // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Dialog Explore   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -133,18 +134,32 @@ function Serverrooms() {
 
   const [newServer, setNewServer] = useState("");
 
-  const addServer = () => {
+  const addToMySer = async(mySers)=>{
+    const docRef1 = doc(db, "users", `${currentUserDb.id}`);
+
+    await updateDoc(docRef1, { myServers: mySers });
+    }
+  
+
+  const addServer = async () => {
     if (newServer !== "") {
-      addDoc(colRef, {
+      let docRef = await addDoc(colRef, {
         createdAt: serverTimestamp(),
         ownerId: currentUser.uid,
-        ownerDocId:currentUserDb.id,
+        ownerDocId: currentUserDb.id,
         serverName: newServer,
       });
+
+      console.log(docRef.id);
+      let mySers = currentUserDb.myServers.push(docRef.id);
+      
+      if(docRef){(addToMySer(mySers))}
+
     }
     setNewServer("");
     getAllServers();
   };
+
 
   const handleInput = (e) => {
     e.preventDefault();
@@ -178,8 +193,12 @@ function Serverrooms() {
           />
         </DialogContent>
         <DialogActions>
-          <Button color="error" onClick={handleClose}>Cancel</Button>
-          <Button color="info" onClick={(e) => handleAdd(e)}>Create</Button>
+          <Button color="error" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button color="info" onClick={(e) => handleAdd(e)}>
+            Create
+          </Button>
         </DialogActions>
       </Dialog>
       <Dialog
@@ -197,25 +216,25 @@ function Serverrooms() {
               ))
             ) : (
               <Box mt={2}>
-              <Typography
-                align="center"
-                variant="subtitle1"
-                component="div"
-                color="primary.dark"
-                sx={{ fontWeight: 400 }}
-              >
-                Our Platform is growing....
-              </Typography>
-              <Typography
-                align="center"
-                variant="subtitle1"
-                component="div"
-                color="primary.dark"
-                sx={{ fontWeight: 400 }}
-              >
-                More Servers will be added Soon !
-              </Typography>
-            </Box>
+                <Typography
+                  align="center"
+                  variant="subtitle1"
+                  component="div"
+                  color="primary.dark"
+                  sx={{ fontWeight: 400 }}
+                >
+                  Our Platform is growing....
+                </Typography>
+                <Typography
+                  align="center"
+                  variant="subtitle1"
+                  component="div"
+                  color="primary.dark"
+                  sx={{ fontWeight: 400 }}
+                >
+                  More Servers will be added Soon !
+                </Typography>
+              </Box>
             )}
           </Stack>
         </DialogContent>
@@ -234,15 +253,19 @@ function Serverrooms() {
           />
         </Box>
 
-        {serversFoll.length? (
+        {serversFoll.length ? (
           serversFoll.map((server, idx) => (
             <Link
               to={`/home/${server.id}`}
               key={idx}
               style={{ textDecoration: "none" }}
-            onClick={()=>handleSelect(server.id)}
+              onClick={() => handleSelect(server.id)}
             >
-              <AvatarComp name={server.serverName} type={"rounded"} sx={selSer === server.id?({border:'2px solid black'}):null} />
+              <AvatarComp
+                name={server.serverName}
+                type={"rounded"}
+                sx={selSer === server.id ? { border: "2px solid black" } : null}
+              />
             </Link>
           ))
         ) : (

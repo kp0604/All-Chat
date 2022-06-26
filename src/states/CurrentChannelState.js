@@ -22,8 +22,8 @@ function CurrentChannelState({ children }) {
 
   const params = useParams()
 
-  useEffect(()=> params&&params.channelId?(setCurChanId(params.channelId)):null,[params.channelId])
-  
+  useEffect(()=> params&&params.channelId?(setCurChanId(params.channelId)):setCurChanId(null),[params.channelId])
+
   return (
     <CurChanStateContext.Provider value={[curChanId,setloadingChat,loadingChat]}>
       {children}

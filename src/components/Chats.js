@@ -115,7 +115,8 @@ function Chats() {
 
   // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>get Message>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-  useEffect(() => (curChanId ? getMessages() : null), [curChanId]);
+  useEffect(() => (curChanId ? getMessages() : setgotMessage([])), [curChanId]);
+  // console.log(curChanId)
 
   const q = query(colRef, orderBy("createdAt"));
 

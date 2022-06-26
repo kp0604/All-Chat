@@ -26,6 +26,11 @@ function AuthState({children}) {
     setCurrentuserDb(userInfo)
   };
 
+  const addUserToLocal = async (userInfo)=>{
+    localStorage.setItem('user',JSON.stringify(userInfo))
+    setCurrentuserDb(userInfo)
+  }
+
   const SignInWithGoogle = async () => {
     // Sign in using a popup.
     const provider = new GoogleAuthProvider();
@@ -40,22 +45,26 @@ function AuthState({children}) {
     const colRef = collection(db,'users')
 
     if(docs.docs.length === 0){
-      let res = addDoc(colRef,{
-      userUID : user.uid,
-      userName : user.displayName,
-      userPhoto : user.photoURL,
-      userEmail : user.email,
-      myServers: [],
-      serversFollowed : [],
-      createdAt : serverTimestamp(),
-      authProvider:'google'
-    })
-    console.log(res)
+      let data ={
+        userUID : user.uid,
+        userName : user.displayName,
+        userPhoto : user.photoURL,
+        userEmail : user.email,
+        myServers: [],
+        serversFollowed : [],
+        createdAt : serverTimestamp(),
+        authProvider:'google'
+      } 
+      let docRef = addDoc(colRef,data)
+      if(docRef){
+        let userInfo = {data,id:docRef.id}
+        addUserToLocal(userInfo)
+      } 
+        
   }
     else{
       let userInfo = {...docs.docs[0].data(),id:`${docs.docs[0].id}`}
-      localStorage.setItem('user',JSON.stringify(userInfo))
-      setCurrentuserDb(userInfo)
+      addUserToLocal(userInfo)
     }
      
     const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -68,6 +77,7 @@ function AuthState({children}) {
 
   const SignOut = () => {
     signOut(auth);
+    localStorage.setItem('user',{})
   };
 
   return (

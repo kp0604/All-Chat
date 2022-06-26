@@ -3,9 +3,9 @@ import { AuthContext } from "../src/states/AuthState";
 import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoutes = () => {
-  const [, , currentUser] = useContext(AuthContext);
+  const [, , ,currentUserDb] = useContext(AuthContext);
 
-  return currentUser ? <Outlet /> : <Navigate to="/" />;
+  return currentUserDb ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default ProtectedRoutes;
