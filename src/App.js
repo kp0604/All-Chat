@@ -20,21 +20,6 @@ const theme = createTheme({
       dark: grey[400],
     },
   },
-  components: {
-    MuiCssBaseline: {
-      styleOverrides: {
-        "@global": {
-          "*": {
-            "scrollbar-width": "thin",
-          },
-          "*::-webkit-scrollbar": {
-            width: "4px",
-            height: "4px",
-          },
-        },
-      },
-    },
-  },
 });
 
 function App() {
@@ -46,8 +31,11 @@ function App() {
             <Route element={<ProtectedRoutes />}>
               <Route path="/home" element={<Dashboard />} />
               <Route path="/home/:serverId" element={<Dashboard />} />
-              <Route path="/home/:serverId/:channelId" element={<Dashboard />} />
-            <Route path="/" element={<Front />} />
+              <Route
+                path="/home/:serverId/:channelId"
+                element={<Dashboard />}
+              />
+              <Route path="/" element={<Front />} />
             </Route>
           </Routes>
         </ThemeProvider>

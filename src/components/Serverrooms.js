@@ -134,12 +134,11 @@ function Serverrooms() {
 
   const [newServer, setNewServer] = useState("");
 
-  const addToMySer = async(mySers)=>{
+  const addToMySer = async (mySers) => {
     const docRef1 = doc(db, "users", `${currentUserDb.id}`);
 
     await updateDoc(docRef1, { myServers: mySers });
-    }
-  
+  };
 
   const addServer = async () => {
     if (newServer !== "") {
@@ -152,14 +151,14 @@ function Serverrooms() {
 
       console.log(docRef.id);
       let mySers = currentUserDb.myServers.push(docRef.id);
-      
-      if(docRef){(addToMySer(mySers))}
 
+      if (docRef) {
+        addToMySer(mySers);
+      }
     }
     setNewServer("");
     getAllServers();
   };
-
 
   const handleInput = (e) => {
     e.preventDefault();
@@ -175,7 +174,14 @@ function Serverrooms() {
   // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
   return (
-    <Box component="div" sx={{ height: "100%", bgcolor: "primary.main" }}>
+    <Box
+      component="div"
+      sx={{
+        height: "100%",
+        bgcolor: "primary.main",
+        // display: { xs: "", md: "block" },
+      }}
+    >
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Enter Your Server Name:</DialogTitle>
         <DialogContent>
@@ -201,12 +207,7 @@ function Serverrooms() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog
-        open={openE}
-        onClose={handleCloseE}
-        maxWidth="sm"
-        fullWidth="true"
-      >
+      <Dialog open={openE} onClose={handleCloseE} maxWidth="sm" fullWidth>
         <DialogTitle>Explore Servers...</DialogTitle>
         <DialogContent>
           <Stack spacing={3} alignItems="center" sx={{ p: 3 }}>

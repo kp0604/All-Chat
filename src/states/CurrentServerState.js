@@ -1,13 +1,7 @@
 import React, { useContext, useEffect, createContext,useState } from "react";
 import {useParams} from 'react-router-dom'
 import {
-    collection,
-    addDoc,
-    onSnapshot,
-    serverTimestamp,
-    query,
     getDoc,
-    getDocs,
     doc,
   } from "firebase/firestore";
   

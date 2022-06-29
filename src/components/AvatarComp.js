@@ -47,7 +47,6 @@ export default function AvatarComp(props) {
         <Avatar
           sx={props.sx}
           variant={props.type}
-          disableUnderline="true"
           src={props.src}
         />
       ) : props.icon && props.name ? (
@@ -58,27 +57,23 @@ export default function AvatarComp(props) {
             bgcolor: `${stringToColor(props.name.toUpperCase())}`,
           }}
           variant={props.type}
-          disableUnderline="true"
         />
       ) : props.icon ? (
         <Avatar
           src={props.icon}
           sx={props.sx}
           variant={props.type}
-          disableUnderline="true"
         />
       ) : props.name ? (
         <Avatar
           {...stringAvatar(props.name.toUpperCase())}
           variant={props.type}
-          disableUnderline="true"
         />
       ) : (
         <Avatar
           src={dis2}
           variant={props.type}
           sx={props.sx}
-          disableUnderline="true"
         />
       )}
     </>

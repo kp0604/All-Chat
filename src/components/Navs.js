@@ -189,16 +189,14 @@ function Navs() {
   // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
   return (
-    <Box component="div" sx={{ height: "100%", bgcolor: "primary.light" }}>
+    <Box sx={{height:"100%",bgcolor: "primary.light",display:'flex', flexDirection:"column" }}>
       {/*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   header   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/}
-      <AppBar position="static" sx={{ bgcolor: "primary.light" }}>
+      <AppBar position="static" sx={{ bgcolor: "primary.light", boxShadow:'0px 0px 0px black', borderBottom:'2px solid lightgray' }}>
         <Toolbar
           variant="dense"
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            py: 0,
-            boxShadow: 1,
           }}
         >
           <Typography
@@ -260,7 +258,7 @@ function Navs() {
                 </Typography>
               </Box>
             </MenuItem>
-            {curServInfo && curServInfo.ownerId === currentUser.uid ? (
+            {curServInfo && curServInfo.ownerId === currentUserDb.userUID ? (
               <>
                 <MenuItem>
                   <Button
@@ -328,16 +326,15 @@ function Navs() {
       {/* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   Subheader  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/}
       <Box
         sx={{
+          flexGrow:1,
           p: 2,
-          // height: "calc(100vh - 80px)",
           bgcolor: "primary.light",
         }}
-        height={0.79}
       >
         <Typography
           variant="subtitle2"
           component="div"
-          gutterBottom="true"
+          gutterBottom
           sx={{
             width: "100%",
             bgcolor: "primary.light",
@@ -448,14 +445,12 @@ function Navs() {
       <Box
         bgcolor="primary.main"
         p={1}
-        display="inline-flex"
-        maxWidth={1}
-        minWidth={0.94}
+        display="flex"
         alignItems="center"
       >
-        <AvatarComp src={currentUser.photoURL} sx={{ mr: 2 }} />
+        <AvatarComp src={currentUserDb.userPhoto} sx={{ mr: 2 }} />
         <Typography align="center" variant="subtitle2" color="primary.dark">
-          {currentUser.displayName}
+          {currentUserDb.userName}
         </Typography>
       </Box>
 

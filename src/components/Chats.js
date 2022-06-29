@@ -8,10 +8,14 @@ import {
   OutlinedInput,
   InputAdornment,
   Grid,
+  SwipeableDrawer,
+  textFieldClasses,
 } from "@mui/material";
 import { useContext, useEffect, useRef, useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
 import TagIcon from "@mui/icons-material/Tag";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 import { db } from "../firebase_config";
 import { AuthContext } from "../states/AuthState";
@@ -31,6 +35,9 @@ import { CurSerStateContext } from "../states/CurrentServerState";
 import AvatarComp from "./AvatarComp";
 import dis1 from "./../imgs/dis1.png";
 import ChatLoading from "./ChatLoading";
+import Serverrooms from "./Serverrooms";
+import Navs from "./Navs";
+// import Members from "./Members";
 
 function Chats() {
   const [, SignOut, currentUser] = useContext(AuthContext);
@@ -116,7 +123,7 @@ function Chats() {
   // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>get Message>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
   useEffect(() => (curChanId ? getMessages() : setgotMessage([])), [curChanId]);
-  // console.log(curChanId)
+  // console.log(curChanId)5
 
   const q = query(colRef, orderBy("createdAt"));
 
@@ -145,155 +152,180 @@ function Chats() {
   //   })
 
   // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  const [open1, setopen1] = useState(false);
+  const [open2, setopen2] = useState(false);
 
   return (
-    <Box height={1}>
-      <AppBar position="static" sx={{ boxShadow: 1, bgcolor: "white" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <AppBar elevation={1} position="static" sx={{ bgcolor: "transparent" }}>
         <Toolbar
           variant="dense"
           sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            boxShadow: "none",
+            // display: "flex",
+            // justifyContent: "space-between",
+            // alignItems: "center",
+            p: 0,
           }}
         >
-          <Typography
-            variant="subtitle1"
-            component="div"
-            alignItems="center"
-            sx={{
-              display: "inline-flex",
-            }}
-          >
-            <TagIcon sx={{ mr: 2 }} />
-
-            {chatroom
-              ? chatroom.chatroomName.charAt(0).toUpperCase() +
-                chatroom.chatroomName.slice(1).toLowerCase()
-              : "Channel Name..."}
-          </Typography>
-          <Box sx={{ borderLeft: "2px solid grey", pl: 2 }}>
-            {currentUser ? (
+          <Grid container>
+            <Grid
+              item
+              xs={2}
+              md={0}
+              sx={{ display: { xs: "block", md: "none" } }}
+            >
               <Button
-                size="small"
-                variant="contained"
-                color="secondary"
-                onClick={SignOut}
-              >
-                Sign-Out
-              </Button>
-            ) : null}
-          </Box>
+                color="info"
+                onClick={() => setopen1(true)}
+                startIcon={<ArrowForwardIosIcon fontSize="small" />}
+              ></Button>
+            </Grid>
+            <Grid item xs={8} md={12}>
+              <Box width={1} display="flex" justifyContent={{xs:"center",md:'flex-start'}}>
+                <Typography
+                  variant="subtitle1"
+                  component="div"
+                  alignItems="center"
+                  sx={{
+                    display: "inline-flex",
+                  }}
+                >
+                  <TagIcon sx={{ mr: 2 }} />
+                  {chatroom
+                    ? chatroom.chatroomName.charAt(0).toUpperCase() +
+                      chatroom.chatroomName.slice(1).toLowerCase()
+                    : "Channel Name..."}
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid
+              item
+              xs={2}
+              md={0}
+              sx={{ display: { xs: curServId ? "block" : "none", md: "none" } }}
+            >
+              <Button
+                color="info"
+                onClick={() => setopen2(true)}
+                endIcon={<ArrowBackIosNewIcon fontSize="small" />}
+              ></Button>
+            </Grid>
+          </Grid>
+          <SwipeableDrawer
+            anchor={"left"}
+            open={open1}
+            onClose={() => setopen1(false)}
+            onOpen={() => setopen1(true)}
+          >
+            <Grid container sx={{ height: "100%" }}>
+              <Grid item xs={3}>
+                <Serverrooms />
+              </Grid>
+              <Grid item xs={9}>
+                <Navs />
+              </Grid>
+            </Grid>
+          </SwipeableDrawer>
+          <SwipeableDrawer
+            anchor={"right"}
+            open={open2}
+            onClose={() => setopen2(false)}
+            onOpen={() => setopen2(true)}
+          >
+            <Members />
+          </SwipeableDrawer>
         </Toolbar>
       </AppBar>
-      {/*  */}
-      <Grid container spacing={0} height={0.92}>
-        <Grid item xs={curServId ? 9 : 12} height={1}>
-          <Box height={1}>
-            <Stack
-              sx={{
-                px: 4,
-                py: 4,
-                // height: "calc(100vh - 250px)",
-                overflowY: "scroll",
-              }}
-              // maxHeight={0.9}
-              height={0.77}
-              spacing={4}
-            >
-              {gotMessage.length && !loadingChat ? (
-                gotMessage.map((msg, idx) => {
-                  return (
-                    <Box
-                      key={idx}
-                      sx={{
-                        display: "flex",
-                      }}
-                    >
-                      <AvatarComp
-                        sx={{ width: 40, height: 40, mr: 3 }}
-                        src={msg.ownerPhoto}
-                      />
-                      <Box maxWidth={0.9}>
-                        <Typography
-                          variant="subtitle1"
-                          color="darkOrange"
-                          component="div"
-                        >
-                          {msg.ownerName}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          component="div"
-                          sx={{ wordWrap: "break-word", maxWidth: 1 }}
-                        >
-                          {msg.message}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  );
-                })
-              ) : loadingChat ? (
-                <ChatLoading />
-              ) : (
+      {curChanId ? (
+        <Stack
+          sx={{
+            px: 4,
+            pt: 2,
+            overflowY: "scroll",
+            flexGrow: 1,
+            flexBasis: 1,
+            flexShrink: 1,
+          }}
+          spacing={4}
+        >
+          {gotMessage.length && !loadingChat ? (
+            gotMessage.map((msg, idx) => {
+              return (
                 <Box
-                  display="flex"
-                  flexDirection="column"
-                  justifyContent="center"
-                  alignItems="center"
-                  height={1}
+                  key={idx}
+                  sx={{
+                    display: "flex",
+                  }}
                 >
                   <AvatarComp
-                    src={dis1}
-                    sx={{ height: "200px", width: "200px", mb: 4 }}
-                    type={"rounded"}
+                    sx={{ width: 40, height: 40, mr: 3 }}
+                    src={msg.ownerPhoto}
                   />
-                  <Typography variant="h6" component="h6" align="center">
-                    Select the Channel you like and Chat with members....
-                  </Typography>
+                  <Box maxWidth={0.9}>
+                    <Typography
+                      variant="subtitle1"
+                      color="darkOrange"
+                      component="div"
+                    >
+                      {msg.ownerName}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      component="div"
+                      sx={{ wordWrap: "break-word", maxWidth: 1 }}
+                    >
+                      {msg.message}
+                    </Typography>
+                  </Box>
                 </Box>
-              )}
-              <div ref={scrollRef}></div>
-            </Stack>
-
-            <Box sx={{ px: 3, pt: 1 }}>
-              <OutlinedInput
-                onKeyPress={(e) => handleKeyPress(e)}
-                disabled={gotMessage.length ? false : true}
-                sx={{ bgcolor: "primary.main" }}
-                value={message}
-                onChange={(e) => handleInput(e)}
-                placeholder="Say Something..."
-                size="small"
-                endAdornment={
-                  <InputAdornment>
-                    <Button
-                      size="large"
-                      endIcon={
-                        <SendIcon
-                          sx={{ color: "primary.dark" }}
-                          fontSize="large"
-                        />
-                      }
-                      onClick={(e) => handleSend(e)}
-                    ></Button>
-                  </InputAdornment>
-                }
-                fullWidth
-              ></OutlinedInput>
-            </Box>
-          </Box>
-        </Grid>
-        <Grid
-          item
-          xs={3}
-          height={1}
-          sx={{ display: curServId ? "block" : "none" }}
+              );
+            })
+          ) : (
+            <ChatLoading />
+          )}
+          <Box ref={scrollRef}></Box>
+        </Stack>
+      ) : (
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          sx={{ flexGrow: 1, px: 2 }}
         >
-          <Members />
-        </Grid>
-      </Grid>
+          <AvatarComp
+            src={dis1}
+            sx={{ height: "200px", width: "200px", mb: 4 }}
+            type={"rounded"}
+          />
+          <Typography variant="h6" component="h6" align="center">
+            Select the Channel you like and Chat with members....
+          </Typography>
+        </Box>
+      )}
+      <Box sx={{ px: 3, py: 2 }}>
+        <OutlinedInput
+          onKeyPress={(e) => handleKeyPress(e)}
+          disabled={gotMessage.length ? false : true}
+          sx={{ bgcolor: "primary.main" }}
+          value={message}
+          onChange={(e) => handleInput(e)}
+          placeholder="Say Something..."
+          size="small"
+          endAdornment={
+            <InputAdornment position="start">
+              <Button
+                size="large"
+                endIcon={
+                  <SendIcon sx={{ color: "primary.dark" }} fontSize="large" />
+                }
+                onClick={(e) => handleSend(e)}
+              ></Button>
+            </InputAdornment>
+          }
+          fullWidth
+        ></OutlinedInput>
+      </Box>
     </Box>
   );
 }

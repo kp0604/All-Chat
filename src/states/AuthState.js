@@ -8,7 +8,8 @@ const AuthContext = createContext(null)
 function AuthState({children}) {
   
   useEffect(()=>{
-    let userInfo = JSON.parse(localStorage.getItem('user'))
+    let userInfo = 
+    JSON.parse(localStorage.getItem('user'))?JSON.parse(localStorage.getItem('user')):{}
     setCurrentuserDb(userInfo)
   },[])
 
@@ -77,7 +78,8 @@ function AuthState({children}) {
 
   const SignOut = () => {
     signOut(auth);
-    localStorage.setItem('user',{})
+    setCurrentuser(null)
+    localStorage.setItem('user',null)
   };
 
   return (
