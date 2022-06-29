@@ -6,11 +6,11 @@ export default function ChatLoading() {
    let arr = [] 
 
   for(let i = 0; i<=5;i++){
-      arr.push(<Box display='inline-flex'>
+      arr.push(<Box display='inline-flex' width="100%">
       <Skeleton variant="circular" width={40} height={40} sx={{mr:2}}/>
-      <Box>
-      <Skeleton variant="text" width={600} />
-      <Skeleton variant="text" width={400} />
+      <Box width="100%">
+      <Skeleton variant="text" width={'100%'} />
+      <Skeleton variant="text" width={'70%'} />
       </Box>
     </Box>)
   }  

@@ -181,7 +181,11 @@ function Chats() {
               ></Button>
             </Grid>
             <Grid item xs={8} md={12}>
-              <Box width={1} display="flex" justifyContent={{xs:"center",md:'flex-start'}}>
+              <Box
+                width={1}
+                display="flex"
+                justifyContent={{ xs: "center", md: "flex-start" }}
+              >
                 <Typography
                   variant="subtitle1"
                   component="div"
@@ -248,40 +252,50 @@ function Chats() {
           }}
           spacing={4}
         >
-          {gotMessage.length && !loadingChat ? (
-            gotMessage.map((msg, idx) => {
-              return (
-                <Box
-                  key={idx}
-                  sx={{
-                    display: "flex",
-                  }}
-                >
-                  <AvatarComp
-                    sx={{ width: 40, height: 40, mr: 3 }}
-                    src={msg.ownerPhoto}
-                  />
-                  <Box maxWidth={0.9}>
-                    <Typography
-                      variant="subtitle1"
-                      color="darkOrange"
-                      component="div"
-                    >
-                      {msg.ownerName}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      component="div"
-                      sx={{ wordWrap: "break-word", maxWidth: 1 }}
-                    >
-                      {msg.message}
-                    </Typography>
+          {gotMessage && !loadingChat ? (
+            <>
+              <Box mt={4}>
+                <Typography variant="h5" alignItems="center" justifyContent="center" sx={{display:'flex'}}>Welcome to <TagIcon sx={{ml:1,color:'crimson'}}/> {chatroom.chatroomName.charAt(0).toUpperCase() +
+                      chatroom.chatroomName.slice(1).toLowerCase()}</Typography>
+                <Typography variant="h5" align="center" mt={2}>Share your views... ✌️✌️</Typography>
+                {/* <Typography variant="h6" align="center">Happy Chatting !!</Typography> */}
+              </Box>
+              {gotMessage.map((msg, idx) => {
+                return (
+                  <Box
+                    key={idx}
+                    sx={{
+                      display: "flex",
+                    }}
+                  >
+                    <AvatarComp
+                      sx={{ width: 40, height: 40, mr: 3 }}
+                      src={msg.ownerPhoto}
+                    />
+                    <Box maxWidth={0.9}>
+                      <Typography
+                        variant="subtitle1"
+                        color="darkOrange"
+                        component="div"
+                      >
+                        {msg.ownerName}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        component="div"
+                        sx={{ wordWrap: "break-word", maxWidth: 1 }}
+                      >
+                        {msg.message}
+                      </Typography>
+                    </Box>
                   </Box>
-                </Box>
-              );
-            })
+                );
+              })}
+            </>
           ) : (
-            <ChatLoading />
+            <Stack spacing={4}>
+              <ChatLoading />
+            </Stack>
           )}
           <Box ref={scrollRef}></Box>
         </Stack>

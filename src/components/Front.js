@@ -11,7 +11,6 @@ function Front() {
   let navigate = useNavigate();
 
   useEffect(() => {
-  console.log(currentUser)
     currentUser ? navigate("/home") : navigate("/");
   }, [currentUser]);
 
